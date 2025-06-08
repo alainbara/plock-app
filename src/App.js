@@ -6,6 +6,7 @@ import { LoginScreen } from "./Components/LoginScreen"
 import { useCallback } from 'react';
 import './my-bulma-project.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
+import { InscriptionScreen } from "./Components/InscriptionScreen";
 function App() {
 
   //function test à enlever plus tard
@@ -25,7 +26,7 @@ function App() {
     <>
 			<div className='background'>
 				<div className='App'>
-          <LoginScreen/>
+          <InscriptionScreen/>
 				</div>
 			</div>
 		</>
