@@ -62,6 +62,10 @@ app.on("activate", () => {
 })
 
 ipcMain.handle('read-all-person', () => {
-    console.log("salut");
   return userManager.readAllPerson();
+});
+
+ipcMain.handle('insert-person', (event, name, password) => {
+  userManager.insertPerson(name, password);
+  return { success: true };
 });

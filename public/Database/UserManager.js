@@ -2,7 +2,6 @@ const dbmgr = require("./DBManager")
 const db = dbmgr.db
 
 const readAllPerson = () => {
-    console.log("oh")
     try {
         console.log(db);
         const query = `SELECT * FROM User`
@@ -18,8 +17,9 @@ const readAllPerson = () => {
 
 const insertPerson = (name, password) => {
     try {
+        console.log(`Inserting user: ${name}, password: ${password}`)
         const insertQuery = db.prepare(
-            `INSERT INTO User (Name, Password) VALUES ('${name}' , ${password})`
+            `INSERT INTO User (Name, Password) VALUES ('${name}' , '${password}')`
         )
 
         const transaction = db.transaction(() => {

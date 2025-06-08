@@ -1,17 +1,19 @@
 import styles from "./inputPerson.module.css"
 
-export const InputPerson = ({ fetchData }) => {
+export const InputPerson = ({ fetchData, insertData }) => {
 	const onSubmit = e => {
 		e.preventDefault()
 		const name = e.target.name?.value
 		const age = e.target.age?.value
 		if (!name || !age) return
 
-		window.sqlite.personDB?.insertPerson(name, parseInt(age))
+		//window.sqlite.personDB?.insertPerson(name, parseInt(age))
 		setTimeout(() => {
 			// TODO: handle it asynchronously
 			fetchData()
+			insertData(name, parseInt(age))
 		}, 200)
+		
 		e.target.reset()
 	}
 
