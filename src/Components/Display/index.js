@@ -14,7 +14,7 @@ export const Display = ({ data }) => {
 							</tr>
 						</thead>
 						<tbody>
-							{data.map(item => (
+							{data.map((item, idx) => (
 								<tr key={item.id}>
 									<td>{item.name}</td>
 									<td>{item.password}</td>
