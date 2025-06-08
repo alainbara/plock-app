@@ -1,0 +1,13 @@
+$white :  #f3f8fb;
+$black : #16120f;
+$brown : #d1884a;
+
+
+@use "bulma/sass" with (
+  $family-primary: '"Nunito", sans-serif',
+  $primary: $brown,
+  $input-icon-focus-color: $brown
+);
+
+
+@import url("https://fonts.googleapis.com/css?family=Nunito:400,700");
