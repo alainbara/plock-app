@@ -2,8 +2,10 @@ import { useEffect, useState } from "react"
 import './App.css';
 import { Display } from "./Components/Display"
 import { InputPerson } from "./Components/InputPerson"
+import { LoginScreen } from "./Components/LoginScreen"
 import { useCallback } from 'react';
-
+import './my-bulma-project.css';
+import '@fortawesome/fontawesome-free/css/all.min.css';
 function App() {
 
   //function test à enlever plus tard
@@ -23,10 +25,8 @@ function App() {
     <>
 			<div className='background'>
 				<div className='App'>
-					<InputPerson fetchData={fetchData} />
-					<Display data={data} />
+          <LoginScreen/>
 				</div>
-				<span>The background is provided by loading.io </span>
 			</div>
 		</>
   );
