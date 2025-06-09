@@ -5,8 +5,6 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 
 export const LoginScreen = ({userConnection}) => {
-   
-    
     
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");

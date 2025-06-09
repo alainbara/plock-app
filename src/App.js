@@ -19,10 +19,6 @@ function App() {
 
 
   const fetchData = useCallback(async () => {
-    console.log("1 : window.sqlite", window.sqlite)
-    console.log("2 : window.sqlite.userDB", window.sqlite?.userDB)
-    console.log("3 : window.sqlite.userDB.readAllPerson", window.sqlite?.userDB?.readAllPerson)
-
 
     if (window.sqlite && window.sqlite.userDB && window.sqlite.userDB.readAllPerson) {
       const data = await window.sqlite.userDB.readAllPerson()
@@ -39,8 +35,7 @@ function App() {
 
   const userConnection = useCallback(async (name, password) => {
     try {
-      const token = await window.sqlite.login.userConnection(name, password)
-      console.log(`Token: ${token}`)
+      return await window.sqlite.login.userConnection(name, password)
     } catch (error) {
       console.error("Connection failed:", error)
     }
