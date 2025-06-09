@@ -13,8 +13,31 @@ function App() {
 
 
   const fetchData = useCallback(async () => {
-    const data = await window.sqlite.userDB.readAllPerson()
-    setData(data)
+    console.log("1 : window.sqlite", window.sqlite)
+    console.log("2 : window.sqlite.userDB", window.sqlite?.userDB)
+    console.log("3 : window.sqlite.userDB.readAllPerson", window.sqlite?.userDB?.readAllPerson)
+
+
+    if (window.sqlite && window.sqlite.userDB && window.sqlite.userDB.readAllPerson) {
+      const data = await window.sqlite.userDB.readAllPerson()
+      setData(data)
+    } else {
+      console.error("window.sqlite.userDB.readAllPerson is not available")
+    }
+  }, [])
+
+  const insertData = useCallback(async (name, password) => {
+    await window.sqlite.userDB.insertPerson(name, password)
+    fetchData()
+  }, [fetchData])
+
+  const userConnection = useCallback(async (name, password) => {
+    try {
+      const token = await window.sqlite.login.userConnection(name, password)
+      console.log(`Token: ${token}`)
+    } catch (error) {
+      console.error("Connection failed:", error)
+    }
   }, [])
 
   useEffect(() => {
@@ -25,7 +48,7 @@ function App() {
     <>
 			<div className='background'>
 				<div className='App'>
-          <LoginScreen/>
+          <LoginScreen userConnection={userConnection} />
 				</div>
 			</div>
 		</>
@@ -33,3 +56,8 @@ function App() {
 }
 
 export default App;
+
+/*
+          <InputPerson fetchData={fetchData} insertData={insertData} />
+					<Display data={data} />
+*/

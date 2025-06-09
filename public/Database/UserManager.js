@@ -1,5 +1,6 @@
 const dbmgr = require("./DBManager")
 const db = dbmgr.db
+const bcrypt = require("bcrypt")
 
 const readAllPerson = () => {
     try {
@@ -15,12 +16,16 @@ const readAllPerson = () => {
     }
 }
 
-const insertPerson = (name, password) => {
+const insertPerson = async (name, password) => {
     try {
+        const saltRounds = 10;
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
         console.log(`Inserting user: ${name}, password: ${password}`)
+        const query = `INSERT INTO User (Name, Password) VALUES ('${name}' , '${hashedPassword}')`
         const insertQuery = db.prepare(
-            `INSERT INTO User (Name, Password) VALUES ('${name}' , '${password}')`
+            `INSERT INTO User (Name, Password) VALUES ('${name}' , '${hashedPassword}')`
         )
+        console.log(`Insert query: ${query}`)
 
         const transaction = db.transaction(() => {
             const info = insertQuery.run()
@@ -38,5 +43,5 @@ const insertPerson = (name, password) => {
 
 module.exports = {
     readAllPerson,
-    insertPerson,
+    insertPerson
 }

@@ -1,10 +1,26 @@
 import styles from "./loginScreen.module.css"
-export const LoginScreen = () => {
+
+export const LoginScreen = ({userConnection}) => {
+    const onSubmit = e => {
+		e.preventDefault()
+		const username = e.target.username?.value
+		const password = e.target.password?.value
+		if (!username || !password) return
+
+		//window.sqlite.personDB?.insertPerson(name, parseInt(age))
+		setTimeout(() => {
+			// TODO: handle it asynchronously
+			userConnection(username, password)
+		}, 200)
+		
+		e.target.reset()
+	}
+
     return (
        
         <div className={`${styles.loginContainer}`}>
             <h1 className={`title is-1 ${styles.loginTitle}`}>Bienvenue chez Plock !</h1>
-            <form className={`${styles.form}`}>
+            <form className={`${styles.form}`} onSubmit={onSubmit}>
                 <fieldset>
                     <h2 className={`title is-3`}>Veuillez-vous connecter</h2>
                     <div className={`field ${styles.form_field}`} class="field">
