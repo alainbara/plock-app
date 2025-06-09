@@ -46,10 +46,10 @@ export const LoginScreen = () => {
     
     return (
         <div className={`${styles.loginContainer}`}>
-            <h1 className={`title is-1 ${styles.loginTitle}`}>Bienvenue chez Plock !</h1>
+            <h1 className={`title is-1 has-text-centered ${styles.loginTitle}`}>Bienvenue chez Plock !</h1>
             <form className={`${styles.form}`} onSubmit={onSubmit}>
                 <fieldset>
-                    <h2 className={`title is-3`}>Veuillez-vous connecter</h2>
+                    <h2 className={`title is-3 has-text-centered`}>Veuillez-vous connecter</h2>
                     <div className={`field ${styles.form_field}`} class="field">
                         <label class="label" htmlFor='username'>Nom d'utilisateur</label>
                         <div class="control has-icons-left">

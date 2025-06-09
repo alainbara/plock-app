@@ -16,10 +16,10 @@ export const InscriptionScreen = () => {
 
     return (
         <div className={`${styles.inscriptionContainer}`}>
-            <h1 className="title is-1 login-title">Bienvenue chez Plock !</h1>
+            <h1 className="title is-1 login-title has-text-centered">Bienvenue chez Plock !</h1>
             <form className="form" >
                 <fieldset>
-                    <h2 className="title is-3">Veuillez-vous inscrire</h2>
+                    <h2 className="title is-3 has-text-centered">Veuillez-vous inscrire</h2>
                     <div className="field form-field">
                         <label className="label" htmlFor='username'>Nom d'utilisateur</label>
                         <div className="control has-icons-left">
