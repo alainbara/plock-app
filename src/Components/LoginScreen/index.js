@@ -4,12 +4,14 @@ import { useAuth } from "../../AuthContext";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 
-export const LoginScreen = (userConnection) => {
+export const LoginScreen = ({userConnection}) => {
    
     
     
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+
+    const  { login, logout, isConnected, user, token } = useAuth();
 
     console.log("check : ", useAuth().isConnected)
 
@@ -19,7 +21,7 @@ export const LoginScreen = (userConnection) => {
 
     }, []);
 
-    const onSubmit = e => {
+    const onSubmit = async e => {
         e.preventDefault();
 
         const name = e.target.username?.value
@@ -32,7 +34,9 @@ export const LoginScreen = (userConnection) => {
         console.log("Password:", password);
 
         if (checkForErrors()) {
-            userConnection(username, password);
+            var new_token = await userConnection(username, password);
+            console.log("New token:", new_token);
+            login(new_token);
             // les réponses utilisateurs sont valides
             // TODO: implémenter la logique de connexion
         } else {
@@ -78,6 +82,7 @@ export const LoginScreen = (userConnection) => {
         
 
         <h2 className={`title is-3`}>{username}</h2>
+        <h2 className={`title is-3`}>{password}</h2>
         </div>
     
     )
