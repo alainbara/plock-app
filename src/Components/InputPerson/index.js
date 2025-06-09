@@ -1,6 +1,9 @@
 import styles from "./inputPerson.module.css"
 
 export const InputPerson = ({ fetchData }) => {
+
+	
+
 	const onSubmit = e => {
 		e.preventDefault()
 		const name = e.target.name?.value
