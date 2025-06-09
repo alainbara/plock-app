@@ -4,7 +4,7 @@ import { useAuth } from "../../AuthContext";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 
-export const LoginScreen = () => {
+export const LoginScreen = (userConnection) => {
    
     
     
@@ -32,6 +32,7 @@ export const LoginScreen = () => {
         console.log("Password:", password);
 
         if (checkForErrors()) {
+            userConnection(username, password);
             // les réponses utilisateurs sont valides
             // TODO: implémenter la logique de connexion
         } else {
