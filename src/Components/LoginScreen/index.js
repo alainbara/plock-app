@@ -8,7 +8,6 @@ export const LoginScreen = ({userConnection}) => {
     
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-
     const  { login, logout, isConnected, user, token } = useAuth();
 
     console.log("check : ", useAuth().isConnected)
@@ -21,12 +20,7 @@ export const LoginScreen = ({userConnection}) => {
 
     const onSubmit = async e => {
         e.preventDefault();
-
-        const name = e.target.username?.value
-		const pwd = e.target.password?.value
-
-        setUsername(name);
-        setPassword(pwd);
+        
 
         console.log("Username:", username);
         console.log("Password:", password);
@@ -56,7 +50,7 @@ export const LoginScreen = ({userConnection}) => {
                     <div className={`field ${styles.form_field}`} class="field">
                         <label class="label" htmlFor='username'>Nom d'utilisateur</label>
                         <div class="control has-icons-left">
-                            <input type='text' className='input is-primary' id='username' name='username' />
+                            <input type='text' className='input is-primary' id='username' name='username' value={username ?? ""} onChange={e => setUsername(e.target.value)} />
                             <span class="icon is-small is-left">
                                 <i class="fas fa-user"></i>
                             </span>
@@ -65,7 +59,7 @@ export const LoginScreen = ({userConnection}) => {
                      <div className={`field ${styles.formField}`} class="field">
                         <label class="label" htmlFor='password'>Mot de passe</label>
                         <div class="control has-icons-left">
-                            <input type='password' className='input is-primary' id='password' name='password' />
+                            <input type='password' className='input is-primary' id='password' name='password'  value={password ?? ""} onChange={e => setPassword(e.target.value)} />
                             <span class="icon is-small is-left">
                                 <i class="fas fa-lock"></i>
                             </span>
