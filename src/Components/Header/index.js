@@ -12,7 +12,7 @@ export const Header = () => {
 
 
     return (
-        <nav className={`navbar ${styles.headerWrapper}`} role="navigation" aria-label="main navigation">
+        <nav className={`navbar is-flex ${styles.headerWrapper}`} role="navigation" aria-label="main navigation">
             <div className={`navbar-brand`}>
                 <div className={`navbar-item ${styles.userContainer}`}>
                     <i className="fas fa-user-circle"></i>
@@ -22,7 +22,7 @@ export const Header = () => {
             <div className={`navbar-start`}>
                
             </div>
-            <div className={`navbar-end`}>
+            <div className={`navbar-end ${styles.logoutWrapper}`}>
                 <div className={`navbar-item`}>
                     <div className={`button is-primary is-outlined`} onClick={handleLogout}>
                         Déconnexion
