@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import styles from "./inscriptionScreen.module.css";
 export const InscriptionScreen = () => {
     
@@ -47,8 +48,9 @@ export const InscriptionScreen = () => {
                         </div>
                     </div>
                     
-                    <div className={styles.form_submit}>
+                    <div className={`buttons ${styles.form_submit}`}>
                         <input class="button is-primary" type='submit' value="S'identifier"/>
+                        <Link to="/" class="button is-primary is-outlined">Retour</Link>
                     </div>
                 </fieldset>
             </form>

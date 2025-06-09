@@ -68,9 +68,9 @@ export const LoginScreen = () => {
                             </span>
                         </div>
                     </div>
-                    <Link to="/inscription" className="button is-link">C'est la première fois que j'utilise Plock</Link>
-                    <div className={styles.formSubmit}>
+                    <div className={`buttons ${styles.form_submit}`}>
                         <input class="button is-primary" type='submit' value="S'identifier"/>
+                        <Link to="/inscription" className="button is-primary is-outlined">C'est la première fois que j'utilise Plock</Link>
                     </div>
                 </fieldset>
             </form>
