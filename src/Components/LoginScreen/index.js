@@ -2,6 +2,7 @@ import { useState } from "react";
 import styles from "./loginScreen.module.css"
 import { useAuth } from "../../AuthContext";
 import { useEffect } from "react";
+import { Link } from "react-router-dom";
 
 export const LoginScreen = () => {
    
@@ -67,6 +68,7 @@ export const LoginScreen = () => {
                             </span>
                         </div>
                     </div>
+                    <Link to="/inscription" className="button is-link">C'est la première fois que j'utilise Plock</Link>
                     <div className={styles.formSubmit}>
                         <input class="button is-primary" type='submit' value="S'identifier"/>
                     </div>

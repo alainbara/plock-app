@@ -7,6 +7,8 @@ import { useCallback } from 'react';
 import './my-bulma-project.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import { InscriptionScreen } from "./Components/InscriptionScreen";
+import { HashRouter, Routes, Route } from "react-router-dom";
+
 function App() {
 
   //function test à enlever plus tard
@@ -25,12 +27,17 @@ function App() {
   return (
     <>
 			<div className='background'>
-				<div className='App'>
-          <InscriptionScreen/>
-				</div>
+        <HashRouter>
+          <Routes>
+            <Route path='/' element={<LoginScreen />} />
+            <Route path='/inscription' element={<InscriptionScreen />} />
+            <Route path='/display' element={<Display data={data} />} />
+            <Route path='/input' element={<InputPerson fetchData={fetchData} />} />
+          </Routes>
+        </HashRouter>
 			</div>
 		</>
   );
 }
-
+ 
 export default App;
