@@ -10,45 +10,59 @@ export const LoginScreen = ({userConnection}) => {
     const [password, setPassword] = useState("");
     const  { login } = useAuth();
 
-    console.log("check : ", useAuth().isConnected)
+    //erreurs de connexion
+    const [isFalse, setIsFalse] = useState(false);
+    const [isEmpty, setIsEmpty] = useState(false);
 
-    useEffect(() => {
-        
-        console.log("LoginScreen mounted");
 
-    }, []);
+
 
     const onSubmit = async e => {
         e.preventDefault();
-        
+        resetErrors();
 
         console.log("Username:", username);
         console.log("Password:", password);
 
-        if (checkForErrors()) {
-            var new_token = await userConnection(username, password);
-            console.log("New token:", new_token);
-            var connexionData = {
-                user: username,
-                token: new_token
+        if (isNotEmpty()) {
+            // L'utilisateur a entré un nom d'utilisateur et un mot de passe
+            var answer = await userConnection(username, password);
+            if (answer.success === true) {
+                //Connexion réussie
+                
+                var connexionData = {
+                    username: username,
+                    token: answer.token,
+                }
+                login(connexionData);
+            } else {
+                //Connexion échouée
+                setIsFalse(true);
+                setUsername("");
+                setPassword("");
             }
-            login(connexionData);
-            // les réponses utilisateurs sont valides
-            // TODO: implémenter la logique de connexion
         } else {
+            // L'utilisateur n'a pas entré de nom d'utilisateur et/ou de mot de passe
+            setIsEmpty(true);
             setUsername("");
             setPassword("");
         }
     }
 
-    const checkForErrors = () => {
-        return true; // TODO: implémenter la vérification des erreurs
+    const isNotEmpty = () => {
+        return username.trim() !== "" && password.trim() !== "";
+    }
+
+    const resetErrors = () => {
+        setIsEmpty(false);
+        setIsFalse(false);
     }
     
     return (
         <div className={`${styles.loginContainer}`}>
             <h1 className={`title is-1 has-text-centered ${styles.loginTitle}`}>Bienvenue chez Plock !</h1>
             <form className={`${styles.form}`} onSubmit={onSubmit}>
+
                 <fieldset>
                     <h2 className={`title is-3 has-text-centered`}>Veuillez-vous connecter</h2>
                     <div className={`field ${styles.form_field}`} class="field">
@@ -73,6 +87,8 @@ export const LoginScreen = ({userConnection}) => {
                         <input class="button is-primary" type='submit' value="S'identifier"/>
                         <Link to="/inscription" className="button is-primary is-outlined">C'est la première fois que j'utilise Plock</Link>
                     </div>
+                    {isFalse && <p className="has-text-danger">Nom d'utilisateur ou mot de passe incorrect</p>}
+                    {isEmpty && <p className="has-text-danger">Veuillez remplir tous les champs</p>}
                 </fieldset>
             </form>
         

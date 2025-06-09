@@ -12,8 +12,8 @@ export const AuthProvider = ({ children }) => {
     const login = (connexionData) => {
         //TODD : mettre des verifs correctes sur les infos de connexion
         setIsConnected(true);
-        setToken(connexionData.token ?? "");
-        setUser(connexionData.username ?? "Utilisateur");
+        setToken(connexionData.token);
+        setUser(connexionData.username);
         navigate("/mainScreen")
     } 
    
