@@ -25,8 +25,6 @@ const userConnection = async (name, password) => {
             expiresIn: "1h"
         });*/
 
-        console.log(`payload : ${payload}`)
-
         return payload
         //retourner un token
 

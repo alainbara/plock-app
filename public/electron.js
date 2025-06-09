@@ -1,6 +1,7 @@
 const path = require("path")
 const { ipcMain } = require('electron');
 const userManager = require('./Database/UserManager');
+const userLogin = require('./Login/UserLogin');
 const { app, BrowserWindow } = require("electron")
 const url = require("url")
 
@@ -72,7 +73,7 @@ ipcMain.handle('insert-person', (event, name, password) => {
 
 ipcMain.handle('user-connection', async (event, name, password) => {
   try {
-	const token = await userManager.userConnection(name, password);
+	const token = await userLogin.userConnection(name, password);
 	return { success: true, token };
   } catch (error) {
 	return { success: false, error: error.message };
