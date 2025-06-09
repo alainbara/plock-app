@@ -10,7 +10,7 @@ export const LoginScreen = ({userConnection}) => {
     
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const  { login, logout, isConnected, user, token } = useAuth();
+    const  { login } = useAuth();
 
     console.log("check : ", useAuth().isConnected)
 
@@ -30,7 +30,11 @@ export const LoginScreen = ({userConnection}) => {
         if (checkForErrors()) {
             var new_token = await userConnection(username, password);
             console.log("New token:", new_token);
-            login(new_token);
+            var connexionData = {
+                user: username,
+                token: new_token
+            }
+            login(connexionData);
             // les réponses utilisateurs sont valides
             // TODO: implémenter la logique de connexion
         } else {

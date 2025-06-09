@@ -4,7 +4,7 @@ const bcrypt = require("bcrypt")
 
 const readAllPerson = () => {
     try {
-        console.log(db);
+        
         const query = `SELECT * FROM User`
         const readQuery = db.prepare(query)
         const rowList = readQuery.all()

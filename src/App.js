@@ -1,18 +1,21 @@
-import { useEffect, useState } from "react"
+import './my-bulma-project.css';
+import '@fortawesome/fontawesome-free/css/all.min.css';
 import './App.css';
+import { useCallback } from 'react';
+import { useEffect, useState } from "react"
 import { Display } from "./Components/Display"
 import { InputPerson } from "./Components/InputPerson"
 import { LoginScreen } from "./Components/LoginScreen"
-import { useCallback } from 'react';
-import './my-bulma-project.css';
-import '@fortawesome/fontawesome-free/css/all.min.css';
 import { InscriptionScreen } from "./Components/InscriptionScreen";
 import { HashRouter, Routes, Route } from "react-router-dom";
+import { Header } from "./Components/Header";
+import { useAuth, } from "./AuthContext";
 
 function App() {
 
   //function test à enlever plus tard
   const [data, setData] = useState([])
+  const {isConnected} = useAuth()
 
 
   const fetchData = useCallback(async () => {
@@ -50,14 +53,17 @@ function App() {
   return (
     <>
 			<div className='background'>
-        <HashRouter>
-          <Routes>
-            <Route path='/' element={<LoginScreen userConnection={userConnection} />} />
-            <Route path='/inscription' element={<InscriptionScreen />} />
-            <Route path='/display' element={<Display data={data} />} />
-            <Route path='/input' element={<InputPerson fetchData={fetchData} />} />
-          </Routes>
-        </HashRouter>
+        
+            {isConnected && <Header />}
+        
+      
+            <Routes>
+              <Route path='/' element={<LoginScreen userConnection={userConnection} />} />
+              <Route path='/inscription' element={<InscriptionScreen />} />
+              <Route path='/display' element={<Display data={data} />} />
+              <Route path='/input' element={<InputPerson fetchData={fetchData} />} />
+            </Routes>
+          
 			</div>
 		</>
   );
