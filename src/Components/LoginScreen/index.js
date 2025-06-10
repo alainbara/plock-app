@@ -14,15 +14,13 @@ export const LoginScreen = ({userConnection}) => {
     const [isFalse, setIsFalse] = useState(false);
     const [isEmpty, setIsEmpty] = useState(false);
 
-
-
+    //gestion d'états
+    const [submitIsLoading, setSubmitIsLoading] = useState(false);
 
     const onSubmit = async e => {
+        setSubmitIsLoading(true);
         e.preventDefault();
         resetErrors();
-
-        console.log("Username:", username);
-        console.log("Password:", password);
 
         if (isNotEmpty()) {
             // L'utilisateur a entré un nom d'utilisateur et un mot de passe
@@ -34,23 +32,28 @@ export const LoginScreen = ({userConnection}) => {
                     username: username,
                     token: answer.token,
                 }
+                resetFields()
                 login(connexionData);
             } else {
                 //Connexion échouée
                 setIsFalse(true);
-                setUsername("");
-                setPassword("");
+                resetFields();
             }
         } else {
             // L'utilisateur n'a pas entré de nom d'utilisateur et/ou de mot de passe
             setIsEmpty(true);
-            setUsername("");
-            setPassword("");
+            resetFields();
         }
     }
 
     const isNotEmpty = () => {
         return username.trim() !== "" && password.trim() !== "";
+    }
+
+    const resetFields = () => {
+        setUsername("");
+        setPassword("");
+        setSubmitIsLoading(false);
     }
 
     const resetErrors = () => {
@@ -84,17 +87,15 @@ export const LoginScreen = ({userConnection}) => {
                         </div>
                     </div>
                     <div className={`buttons ${styles.form_submit}`}>
-                        <input class="button is-primary" type='submit' value="S'identifier"/>
+                        <button class={`button is-primary ${submitIsLoading===true ? "is-loading" : ""} `} type='submit'>S'identifier</button>
                         <Link to="/inscription" className="button is-primary is-outlined">C'est la première fois que j'utilise Plock</Link>
                     </div>
-                    {isFalse && <p className="has-text-danger">Nom d'utilisateur ou mot de passe incorrect</p>}
-                    {isEmpty && <p className="has-text-danger">Veuillez remplir tous les champs</p>}
+                    <div className={`${styles.errorsWrapper}`}>
+                        {isFalse && <p className="has-text-danger">Nom d'utilisateur ou mot de passe incorrect</p>}
+                        {isEmpty && <p className="has-text-danger">Veuillez remplir tous les champs</p>}
+                    </div>
                 </fieldset>
             </form>
-        
-
-        <h2 className={`title is-3`}>{username}</h2>
-        <h2 className={`title is-3`}>{password}</h2>
         </div>
     
     )
