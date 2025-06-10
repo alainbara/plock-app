@@ -11,3 +11,7 @@
 .formField {}
 
 .formSubmit {}
+
+.errorsWrapper {
+    height: 50px;
+}   
