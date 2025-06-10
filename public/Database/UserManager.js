@@ -16,6 +16,20 @@ const readAllPerson = () => {
     }
 }
 
+const getPersonByName = (name) => {
+    try {
+        const query = `SELECT * FROM User WHERE Name = ?`
+        const readQuery = db.prepare(query)
+        const rowList = readQuery.all(name)
+        console.log(rowList)
+        return rowList
+    } catch (err) {
+        console.error(err)
+        throw err
+    }
+}
+
+
 const insertPerson = async (name, password) => {
     try {
         const saltRounds = 10;
@@ -43,5 +57,6 @@ const insertPerson = async (name, password) => {
 
 module.exports = {
     readAllPerson,
-    insertPerson
+    insertPerson,
+    getPersonByName
 }

@@ -71,6 +71,15 @@ ipcMain.handle('insert-person', (event, name, password) => {
   return { success: true };
 });
 
+ipcMain.handle('get-person-by-name', (event, name) => {
+  try {
+	const person = userManager.getPersonByName(name);
+	return { success: true, person };
+  } catch (error) {
+	return { success: false, error: error.message };
+  }
+});
+
 ipcMain.handle('user-connection', async (event, name, password) => {
   try {
 	const token = await userLogin.userConnection(name, password);
