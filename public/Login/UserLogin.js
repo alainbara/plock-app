@@ -1,5 +1,7 @@
 const dbmgr = require("../Database/DBManager")
 const db = dbmgr.db
+const { v4: uuidv4 } = require('uuid');
+//const jwt = require('jsonwebtoken');
 
 const userConnection = async (name, password) => {
     try {
@@ -20,14 +22,14 @@ const userConnection = async (name, password) => {
             throw new Error("Invalid password")
         }*/
 
-        const payload = { username: user.name };
-        /*const token = jwt.sign(payload, process.env.JWT_SECRET, {
-            expiresIn: "1h"
-        });*/
+        const username = user.name ;
+        const token = uuidv4();
 
-        console.log(`payload : ${payload}`)
+        //const new_token = jwt.sign(user, token, {
+        //    expiresIn: '1h' // Token expires in 1 hour
+        //});
 
-        return payload
+        return ( username, token )
         //retourner un token
 
     } catch (err) {

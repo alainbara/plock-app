@@ -1,0 +1,11 @@
+@import '../../variables.css';
+
+.headerWrapper {
+    border-bottom: 1px solid var(--main-secondary-color);
+    box-shadow: 0 0px 8px 0 var(--main-secondary-color);
+    flex-wrap: nowrap !important;
+}
+
+.logoutWrapper {
+    margin-left: auto;
+}
