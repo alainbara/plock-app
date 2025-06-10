@@ -1,6 +1,7 @@
 const dbmgr = require("../Database/DBManager")
 const db = dbmgr.db
 const { v4: uuidv4 } = require('uuid');
+const bcrypt = require("bcrypt")
 //const jwt = require('jsonwebtoken');
 
 const userConnection = async (name, password) => {
@@ -13,14 +14,10 @@ const userConnection = async (name, password) => {
             throw new Error("User not found")
         }
 
-        if (password !== user.password) {
-            throw new Error("Invalid password")
-        }
-
-        /*const isPasswordValid = bcrypt.compareSync(password, user.Password);
+        const isPasswordValid = bcrypt.compareSync(password, user.Password);
         if (!isPasswordValid) {
             throw new Error("Invalid password")
-        }*/
+        }
 
         const username = user.name ;
         const token = uuidv4();
@@ -30,7 +27,6 @@ const userConnection = async (name, password) => {
         //});
 
         return ( username, token )
-        //retourner un token
 
     } catch (err) {
         console.error(err)
