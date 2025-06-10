@@ -37,14 +37,12 @@ export const LoginScreen = ({userConnection}) => {
             } else {
                 //Connexion échouée
                 setIsFalse(true);
-                setUsername("");
-                setPassword("");
+                resetFields();
             }
         } else {
             // L'utilisateur n'a pas entré de nom d'utilisateur et/ou de mot de passe
             setIsEmpty(true);
-            setUsername("");
-            setPassword("");
+            resetFields();
         }
     }
 
