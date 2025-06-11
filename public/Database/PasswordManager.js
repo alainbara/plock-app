@@ -3,7 +3,7 @@ const db = dbmgr.db
 
 const getPasswordsByUserId = (userId) => {
     try {
-        const query = `SELECT * FROM Passwords WHERE UserId = ?`
+        const query = `SELECT * FROM Password WHERE user_id = ?`
         const readQuery = db.prepare(query)
         const rowList = readQuery.all(userId)
         console.log(rowList)
@@ -15,11 +15,23 @@ const getPasswordsByUserId = (userId) => {
 }
 
 const insertPassword = (userId, website, username, password, icon) => {
+        let iconBuffer = null;
+        if (icon) {
+            if (Buffer.isBuffer(icon)) {
+                iconBuffer = icon;
+            } else if (icon instanceof Uint8Array || icon instanceof ArrayBuffer) {
+                iconBuffer = Buffer.from(icon);
+            } else {
+                // Si c'est un objet File/Blob venant du front, il faut le convertir AVANT d'arriver ici
+                throw new Error("L'icône doit être un Buffer, Uint8Array, ArrayBuffer ou null");
+            }
+        }
+
     try {
-        const query = `INSERT INTO Passwords (UserId, Website, Username, Password, Icon) VALUES (?, ?, ?, ?, ?)`
+        const query = `INSERT INTO Password (user_id, Website, Username, Password, Icon) VALUES (?, ?, ?, ?, ?)`
         const insertQuery = db.prepare(query)
         const transaction = db.transaction(() => {
-            const info = insertQuery.run(userId, website, username, password, icon)
+            const info = insertQuery.run(userId, website, username, password, iconBuffer)
             console.log(`Inserted ${info.changes} rows with last ID ${info.lastInsertRowid}`)
         })
         transaction()
