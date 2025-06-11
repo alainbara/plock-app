@@ -10,13 +10,12 @@ export const Header = () => {
         logout();
     }
 
-
     return (
         <nav className={`navbar is-flex ${styles.headerWrapper}`} role="navigation" aria-label="main navigation">
             <div className={`navbar-brand`}>
                 <div className={`navbar-item ${styles.userContainer}`}>
                     <i className="fas fa-user-circle"></i>
-                    <span className="userName">{user}</span>
+                    <span className="userName">{user.username}</span>
                 </div>
             </div>
             <div className={`navbar-start`}>

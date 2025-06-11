@@ -25,11 +25,17 @@ const userConnection = async (name, password) => {
         const username = user.name ;
         const token = uuidv4();
 
+        const result = {
+            id: user.id,
+            name: username,
+            token: token
+        };
+
         //const new_token = jwt.sign(user, token, {
         //    expiresIn: '1h' // Token expires in 1 hour
         //});
 
-        return ( username, token )
+        return ( result )
         //retourner un token
 
     } catch (err) {

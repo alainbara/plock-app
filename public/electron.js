@@ -2,6 +2,7 @@ const path = require("path")
 const { ipcMain } = require('electron');
 const userManager = require('./Database/UserManager');
 const userLogin = require('./Login/UserLogin');
+const passwordManager = require('./Database/PasswordManager');
 const { app, BrowserWindow } = require("electron")
 const url = require("url")
 
@@ -84,6 +85,33 @@ ipcMain.handle('user-connection', async (event, name, password) => {
   try {
 	const token = await userLogin.userConnection(name, password);
 	return { success: true, token };
+  } catch (error) {
+	return { success: false, error: error.message };
+  }
+});
+
+ipcMain.handle('get-person-by-id', (event, id) => {
+  try {
+	const person = userManager.getPersonById(id);
+	return { success: true, person };
+  } catch (error) {
+	return { success: false, error: error.message };
+  }
+});
+
+ipcMain.handle('get-passwords-by-user-id', (event, userId) => {
+  try {
+	const passwords = passwordManager.getPasswordsByUserId(userId);
+	return { success: true, passwords };
+  } catch (error) {
+	return { success: false, error: error.message };
+  }
+});
+
+ipcMain.handle('insert-password', (event, userId, website, username, password, icon) => {
+  try {
+	passwordManager.insertPassword(userId, website, username, password, icon);
+	return { success: true };
   } catch (error) {
 	return { success: false, error: error.message };
   }
