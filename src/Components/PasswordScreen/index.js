@@ -20,6 +20,10 @@ export const PasswordScreen = ({getPasswordsByUserId, getPersonByName}) => {
     const [icon, setIcon] = useState(null); // Pour stocker l'icône du site
     const [iconName, setIconName] = useState("");
 
+    //Erreurs de validation
+    const [isEmpty, setIsEmpty] = useState(false);      
+    const [isWrongImage, setIsWrongImage] = useState(false); // Pour gérer les erreurs d'image
+
 
     useEffect(() => {
         const fetchPasswords = async () => {
@@ -64,30 +68,59 @@ export const PasswordScreen = ({getPasswordsByUserId, getPersonByName}) => {
     };
     
     const manageFileInput = (e) => {
+        resetErrors()
         const file = e.target.files[0];
-        setIcon(file || null);
-        setIconName(file ? file.name : "");
+        if (file && checkImage(file)) {
+            setIcon(file || null);
+            setIconName(file ? file.name : ""); 
+        } else {
+            setIsWrongImage(true);
+        }
     };
 
     const submitNewPassord = async () => {
         console.log("submitNewPassord called");
+        resetErrors();
         // Vérification des champs requis
 
         // Appel à la fonction pour ajouter le mot de passe
-        try {
-            await window.sqlite.passwordDB.insertPassword(user.id, website, username, password, icon ? await icon.arrayBuffer() : null);
+        if (checkErrors()) {
+            try {
+                await window.sqlite.passwordDB.insertPassword(user.id, website, username, password, icon ? await icon.arrayBuffer() : null);
+                resetFields();
+                closeModal();
+                fetchPasswords()
+                
+            } catch (error) {
+                console.error("Erreur lors de l'ajout du mot de passe :", error);
+                alert("Une erreur est survenue lors de l'ajout du mot de passe.");
+            }
+        } else {
+            setIsEmpty(true);   
             resetFields();
-            closeModal();
-            fetchPasswords()
-            
-        } catch (error) {
-            console.error("Erreur lors de l'ajout du mot de passe :", error);
-            alert("Une erreur est survenue lors de l'ajout du mot de passe.");
         }
     }
 
-    
+    const checkErrors = () => {
+        // Vérifie si les champs requis sont remplis
+        return website.trim() !== "" && username.trim() !== "" && password.trim() !== "";
+    }
 
+    const checkImage = (file) => {
+        // Vérifie si l'icône est une image valide  
+        if (file) {
+            console.log(file)
+            const validImageTypes = ['image/jpeg', 'image/png', 'image/gif'];
+            return validImageTypes.includes(file.type);
+        } 
+
+        return true; // Si pas d'icône, on considère que c'est valide
+    }
+    
+    
+    const resetErrors = () => {
+        setIsEmpty(false);
+    }
 
     return (
         <div>
@@ -135,6 +168,10 @@ export const PasswordScreen = ({getPasswordsByUserId, getPersonByName}) => {
                                         <span class="file-name"> {iconName.trim()!=="" ? iconName : "Ceci est optionnel."} </span>
                                     </label>
                                 </div>
+                            </div>
+                             <div className={`${styles.errorsWrapper}`}>
+                                {isEmpty && <p className="has-text-danger">Les champs Site, Nom d'utilisateur et Mot de passe doivent être remplis.</p>}
+                                {isWrongImage && <p className="has-text-danger">Seulement les formats PNG, JPG et GIF sont autorisés.</p>}
                             </div>
                         </form>
                     </section>
