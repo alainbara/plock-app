@@ -13,7 +13,9 @@ contextBridge.exposeInMainWorld("sqlite", {
     },
     passwordDB: {
       getPasswordsByUserId: (userId) => ipcRenderer.invoke("get-passwords-by-user-id", userId),
-      insertPassword: (userId, website, username, password, icon) => ipcRenderer.invoke("insert-password", userId, website, username, password, icon)
+      insertPassword: (userId, website, username, password, icon) => ipcRenderer.invoke("insert-password", userId, website, username, password, icon),
+      editPassword: (passwordId, userId, website, username, password, icon) => ipcRenderer.invoke("edit-password", passwordId, userId, website, username, password, icon),
+      deletePassword: (passwordId) => ipcRenderer.invoke("delete-password", passwordId),
     }
 })
 

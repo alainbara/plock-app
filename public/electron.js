@@ -116,3 +116,22 @@ ipcMain.handle('insert-password', (event, userId, website, username, password, i
 	return { success: false, error: error.message };
   }
 });
+
+ipcMain.handle('edit-password', (event, passwordId, userId, website, username, password, icon) => {
+  try {
+	passwordManager.editPassword(passwordId, userId, website, username, password, icon);
+	return { success: true };
+  } catch (error) {
+	return { success: false, error: error.message };
+  }
+});
+
+ipcMain.handle('delete-password', (event, passwordId) => {
+  try {
+	passwordManager.deletePassword(passwordId);
+	return { success: true };
+  } catch (error) {
+	return { success: false, error: error.message };
+  }
+});
+// In this file, you can include the rest of your Electron app code.

@@ -11,8 +11,7 @@ export const PasswordScreen = ({getPasswordsByUserId, getPersonByName}) => {
     const navigate = useNavigate();
     const { user } = useAuth();
     
-    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-
+    
     //Données du formulaire d'ajout de mot de passe
     const [password, setPassword] = useState("");
     const [username, setUsername] = useState("");
@@ -23,6 +22,12 @@ export const PasswordScreen = ({getPasswordsByUserId, getPersonByName}) => {
     //Erreurs de validation
     const [isEmpty, setIsEmpty] = useState(false);      
     const [isWrongImage, setIsWrongImage] = useState(false); // Pour gérer les erreurs d'image
+    
+    //Variable d'état
+    const [isEditMode, setIsEditMode] = useState(false); // Pour gérer le mode édition
+    const [passwordId, setPasswordId] = useState(null); // Pour stocker l'ID du mot de passe en cours d'édition
+    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
 
     useEffect(() => {
@@ -55,7 +60,9 @@ export const PasswordScreen = ({getPasswordsByUserId, getPersonByName}) => {
     };
 
     const closeModal = () => {
+        resetErrors()
         resetFields();
+        if (isEditMode) { setIsEditMode(false) }
         setIsAddModalOpen(false);
     }
 
@@ -77,6 +84,25 @@ export const PasswordScreen = ({getPasswordsByUserId, getPersonByName}) => {
             setIsWrongImage(true);
         }
     };
+
+    const startEdition = (index) => {
+        console.log("editPassword called with index:", index);
+
+        const editedPassword = passwordList.filter(e => e["id"] === index)[0];
+
+        console.log(editedPassword)
+        if (editedPassword) {
+            setWebsite(editedPassword.website || "");
+            setUsername(editedPassword.username || "");
+            setPassword(editedPassword.password || "");
+            setIcon(editedPassword.icon || null);
+            setIconName(""); // Tu peux mettre le nom du fichier si tu le stockes, sinon laisse vide
+            setPasswordId(editedPassword.id);
+            setIsEditMode(true);
+            setIsAddModalOpen(true); // Ouvre la modal en mode édition
+        }
+        //on change les variables
+    }
 
     const submitNewPassord = async () => {
         console.log("submitNewPassord called");
@@ -117,21 +143,83 @@ export const PasswordScreen = ({getPasswordsByUserId, getPersonByName}) => {
         return true; // Si pas d'icône, on considère que c'est valide
     }
     
+    const editPassword = async () => {
+        resetErrors();
+        // Vérification des champs requis
+
+        // Appel à la fonction pour ajouter le mot de passe
+        if (checkErrors()) {
+            try {
+
+                var new_icon = null;
+                if (icon instanceof Uint8Array || icon instanceof ArrayBuffer) {
+                    new_icon = icon;
+                } else if (icon != null ) {
+                    new_icon = await icon.arrayBuffer()
+                } 
+                await window.sqlite.passwordDB.editPassword(passwordId,user.id, website, username, password, new_icon);
+                resetFields();  
+                closeModal();
+                setIsEditMode(false);
+                fetchPasswords()
+                
+            } catch (error) {
+                console.error("Erreur lors de l'ajout du mot de passe :", error);
+                alert("Une erreur est survenue lors de l'ajout du mot de passe.");
+            }
+        } else {
+            setIsEmpty(true);   
+            resetFields();
+        }
+    }
     
     const resetErrors = () => {
         setIsEmpty(false);
+        setIsWrongImage(false);
     }
 
+    const startDelete = (id) => {
+        console.log("startDelete called with id:", id); 
+        setIsDeleteModalOpen(true);
+        setPasswordId(id);
+
+    }
+
+    const deletePassword = async () => {
+        console.log("deletePassword called with passwordId:", passwordId);
+        
+
+        try {
+            await window.sqlite.passwordDB.deletePassword(passwordId);
+            closeDeleteModal();
+            fetchPasswords();
+        } catch (error) {
+            console.error("Erreur lors de la suppression du mot de passe :", error);
+            alert("Une erreur est survenue lors de la suppression du mot de passe.");
+                }
+    }
+
+    const closeDeleteModal = () => {
+        setIsDeleteModalOpen(false);
+        setPasswordId(null);
+    }
+
+
     return (
-        <div>
-            <PasswordList passwordList={passwordList} />
+        <div className={`${styles.passwordScreen}`}>
+            <nav className={`panel is-primary ${styles.passwordPanel}`}>
+                <p className={`panel-heading ${styles.passwordPanelHeading}`}>Mes mots de passe</p>
+                <PasswordList passwordList={passwordList} edit={startEdition} deletePassword={startDelete} />
+            </nav>
+
              <button class="button is-primary" onClick={openModal}>Ajouter un mot de passe</button>
 
-            <div className={`modal${isAddModalOpen ? " is-active" : ""}`}>
+            {/* modal d'ajout et edition */}
+            <div className={`modal is-primary${isAddModalOpen ? " is-active" : ""}`}>
                 <div class="modal-background"></div>
                 <div class="modal-card">
-                    <header class={`modal-card-head ${styles.modalHeader}`}>
-                        <p class="modal-card-title">Ajout d'un mot de passe</p>
+                    <header class={`modal-card-head is-primary ${styles.modalHeader}`}>
+                        <p class="modal-card-title">{ isEditMode===true ? "Modifier un mot de passe" : "Ajouter un mot de passe"}</p>
                         <button class="delete" aria-label="close" onClick={closeModal}></button>
                     </header>
                     <section class="modal-card-body">
@@ -177,11 +265,32 @@ export const PasswordScreen = ({getPasswordsByUserId, getPersonByName}) => {
                     </section>
                     <footer class="modal-card-foot">
                         <div class="buttons">
-                            <button class="button is-primary" onClick={submitNewPassord}>Enregistrer</button>
+                            <button class="button is-primary" onClick={isEditMode === true ? editPassword : submitNewPassord}>Enregistrer</button>
                             <button class="button" onClick={closeModal}>Annuler</button>
                         </div>
                     </footer>
                 </div>  
+            </div>
+
+            {/* modal de suppression */}
+            <div className={`modal is-primary ${isDeleteModalOpen ? " is-active" : ""}`}>
+                <div class="modal-background"></div>
+                <div class="modal-card">
+                    <header class={`modal-card-head is-primary ${styles.modalHeader}`}>
+                        <p class="modal-card-title">Supprimer un mot de passe</p>
+                        <button class="delete" aria-label="close" onClick={closeDeleteModal}></button>
+                    </header>
+                    <section class="modal-card-body">
+                        <p>Êtes-vous sûr de vouloir supprimer ce mot de passe ? Cette action est irréversible.</p>
+                        <p className="has-text-danger">Cette action supprimera définitivement le mot de passe.</p>
+                    </section>
+                    <footer class="modal-card-foot">
+                        <div class="buttons">
+                            <button class="button is-danger" onClick={deletePassword}>Supprimer</button>
+                            <button class="button" onClick={closeDeleteModal}>Annuler</button>
+                        </div>
+                    </footer>
+                </div>
             </div>
         </div>
     )
