@@ -29,6 +29,19 @@ const getPersonByName = (name) => {
     }
 }
 
+const getPersonById = (id) => {
+    try {
+        const query = `SELECT * FROM User WHERE id = ?`
+        const readQuery = db.prepare(query)
+        const rowList = readQuery.all(id)
+        console.log(rowList)
+        return rowList
+    } catch (err) {
+        console.error(err)
+        throw err
+    }
+}
+
 
 const insertPerson = async (name, password) => {
     try {

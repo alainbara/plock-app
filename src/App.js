@@ -7,6 +7,7 @@ import { Display } from "./Components/Display"
 import { InputPerson } from "./Components/InputPerson"
 import { LoginScreen } from "./Components/LoginScreen"
 import { InscriptionScreen } from "./Components/InscriptionScreen";
+import { PasswordScreen } from "./Components/PasswordScreen"; 
 import { HashRouter, Routes, Route } from "react-router-dom";
 import { Header } from "./Components/Header";
 import { useAuth, } from "./AuthContext";
@@ -41,6 +42,22 @@ function App() {
     }
   }, [])
 
+  const getPasswordsByUserId = useCallback(async (userId) => {
+    try {
+      return await window.sqlite.passwordDB.getPasswordsByUserId(userId)
+    } catch (error) {
+      console.error("Failed to get passwords by user ID:", error)
+    }
+  }, []);
+
+  const getPersonByName = useCallback(async (name) => {
+    try {
+      return await window.sqlite.userDB.getPersonByName(name)
+    } catch (error) {
+      console.error("Failed to get person by name:", error)
+    }
+  }, []);
+
   useEffect(() => {
 		fetchData()
 	}, [fetchData])
@@ -55,8 +72,7 @@ function App() {
             <Routes>
               <Route path='/' element={<LoginScreen userConnection={userConnection} />} />
               <Route path='/inscription' element={<InscriptionScreen />} />
-              <Route path='/display' element={<Display data={data} />} />
-              <Route path='/input' element={<InputPerson fetchData={fetchData} />} />
+              <Route path='/mainScreen' element={<PasswordScreen getPersonByName={getPersonByName} getPasswordsByUserId={getPasswordsByUserId} />} />
             </Routes>
           
 			</div>

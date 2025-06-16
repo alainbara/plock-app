@@ -13,7 +13,7 @@ export const AuthProvider = ({ children }) => {
         //TODD : mettre des verifs correctes sur les infos de connexion
         setIsConnected(true);
         setToken(connexionData.token);
-        setUser(connexionData.username);
+        setUser(connexionData.user);
         navigate("/mainScreen")
     } 
    
