@@ -6,6 +6,7 @@ import { PasswordList } from '../PasswordList/';
 
 
 export const PasswordScreen = ({getPasswordsByUserId, getPersonByName}) => {
+    const [fullPasswordList, setFullPasswordList] = useState([]);
     const [passwordList, setPasswordList] = useState([]);
     
     const navigate = useNavigate();
@@ -35,6 +36,7 @@ export const PasswordScreen = ({getPasswordsByUserId, getPersonByName}) => {
             try {
                 const answer = await getPasswordsByUserId(user.id);
                 setPasswordList(answer.passwords);
+                setFullPasswordList(answer.passwords);
                 console.log('Fetched passwords:', answer.passwords);
             } catch (error) {
                 console.error('Error fetching passwords:', error);
@@ -44,11 +46,26 @@ export const PasswordScreen = ({getPasswordsByUserId, getPersonByName}) => {
         fetchPasswords();
     }, [user.id, getPasswordsByUserId]);    
 
+    const search = (e) => {
+        e.preventDefault();
+        const searchTerm = e.target.value.toLowerCase();
+        console.log("Search term:", searchTerm);
+        const filteredPasswords = fullPasswordList.filter(password => 
+            password.website.toLowerCase().includes(searchTerm) || 
+            password.username.toLowerCase().includes(searchTerm)
+        );
+        setPasswordList(filteredPasswords);
+        if (searchTerm === "") {
+            setPasswordList(fullPasswordList);
+        }
+    }
+
 
     const fetchPasswords = async () => {
             try {
                 const answer = await getPasswordsByUserId(user.id);
                 setPasswordList(answer.passwords);
+                setFullPasswordList(answer.passwords);
                 console.log('Fetched passwords:', answer.passwords);
             } catch (error) {
                 console.error('Error fetching passwords:', error);
@@ -209,10 +226,26 @@ export const PasswordScreen = ({getPasswordsByUserId, getPersonByName}) => {
         <div className={`${styles.passwordScreen}`}>
             <nav className={`panel is-primary ${styles.passwordPanel}`}>
                 <p className={`panel-heading ${styles.passwordPanelHeading}`}>Mes mots de passe</p>
-                <PasswordList passwordList={passwordList} edit={startEdition} deletePassword={startDelete} />
+                 <div className={`panel-block ${styles.passwordPanelBlock}`}>
+                    <p className={`control has-icons-left`}>
+                        <input className={`input is-primary`} type="text" placeholder="Recherche par site web" onChange={(e) => search(e)} />
+                        <span className={`icon is-left`}>
+                            <i className={`fas fa-search`} aria-hidden="true"></i>
+                        </span>
+                    </p>
+
+                    <button className={`ml-1 button is-primary ${styles.addButton}`} onClick={openModal}> 
+                        <span className={`icon`}>
+                            <i className={`fas fa-plus`}></i>
+                        </span>
+                        <span>Nouveau mot de passe</span>
+                    </button>
+                </div>
+                <div className={`panel-block ${styles.passwordPanelBlock}`}>
+                    <PasswordList passwordList={passwordList} edit={startEdition} deletePassword={startDelete} />
+                </div>
             </nav>
 
-             <button class="button is-primary" onClick={openModal}>Ajouter un mot de passe</button>
 
             {/* modal d'ajout et edition */}
             <div className={`modal is-primary${isAddModalOpen ? " is-active" : ""}`}>

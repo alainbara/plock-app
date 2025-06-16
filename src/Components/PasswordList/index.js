@@ -19,7 +19,7 @@ export const PasswordList = ({ passwordList, edit, deletePassword }) => {
    
 
     return (
-        <div className="password-list">
+        <div className={`${styles.passwordList}`}>
             <table className={`table ${styles.passwordTable}`}>
                 <thead>
                     <tr>
