@@ -6,7 +6,7 @@ const bcrypt = require("bcrypt")
 
 const userConnection = async (name, password) => {
     try {
-        const query = `SELECT * FROM User WHERE Name = ?`
+        const query = `SELECT * FROM User WHERE name = ?`
         const readQuery = db.prepare(query)
         const user = readQuery.get(name)
         
@@ -14,7 +14,7 @@ const userConnection = async (name, password) => {
             throw new Error("User not found")
         }
 
-        const isPasswordValid = bcrypt.compareSync(password, user.Password);
+        const isPasswordValid = bcrypt.compareSync(password, user.password);
         if (!isPasswordValid) {
             throw new Error("Invalid password")
         }
@@ -22,6 +22,7 @@ const userConnection = async (name, password) => {
         const username = user.name ;
         const token = uuidv4();
 
+        console.log("User connected: ", user)
         const result = {
             id: user.id,
             name: username,

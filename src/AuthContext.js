@@ -11,6 +11,7 @@ export const AuthProvider = ({ children }) => {
 
     const login = (connexionData) => {
         //TODD : mettre des verifs correctes sur les infos de connexion
+        console.log("Connexion réussie", connexionData); 
         setIsConnected(true);
         setToken(connexionData.token);
         setUser(connexionData.user);

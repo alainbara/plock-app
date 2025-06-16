@@ -27,6 +27,7 @@ export const LoginScreen = ({userConnection}) => {
             var answer = await userConnection(username, password);
             if (answer.success === true) {
                 //Connexion réussie
+                console.log("Connexion réussie ?", answer.token);
                 var connexionData = {
                     user: {id: answer.token.id, username: answer.token.name},
                     token: answer.token.token,
